@@ -1,0 +1,14 @@
+{
+  "name": "lindsay-khan-academy-challenge-comparison-tool",
+  "version": "1.0.0",
+  "description": "",
+  "main": "comparejs.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Lindsay Elia",
+  "license": "ISC",
+  "dependencies": {
+    "esprima": "^2.7.2"
+  }
+}

@@ -10,11 +10,18 @@ var $secondVariable;
 
 
 var userInput = "var i;" +
+				"var lindsay;" +
+				"for ( i = 0; i < 10; i++) {" +
+				"    console.log(i);" +
+				"}" +
 				"for ( i = 0; i < 10; i++) {" +
 				"    console.log(i);" +
 				"}";
-// var userProgram = JSON.stringify(esprima.parse(userInput), null, 4);	// this format is just to output to console
-var userProgram = esprima.parse(userInput);		// this format is for tree traversal
+
+// this format is just to output to console
+// var userProgram = JSON.stringify(esprima.parse(userInput), null, 4);
+// this format is for tree traversal
+var userProgram = esprima.parse(userInput);
 
 
 var printFunc = function(value){
@@ -22,6 +29,7 @@ var printFunc = function(value){
 };
 
 // tree traversal code found on http://sevinf.github.io/blog/2012/09/29/esprima-tutorial/
+// traverse each node in the tree and apply a funtcion to it
 function traverse(node, calledFunction) {
 	// Calling the function for a root node - base of recursion
 	console.log("-------------------------------------");
@@ -32,7 +40,7 @@ function traverse(node, calledFunction) {
     	// Ignore inherited properties of an object
         if (node.hasOwnProperty(key)) {
             var child = node[key];
-            // ignore if not an object or if null (typeof null is object)
+            // ignore if not an object or if null (typeof null is an object)
             if (typeof child === 'object' && child !== null) {
                 if (Array.isArray(child)) {
                 	// Each child can be either single subnode or array of subnodes. 
@@ -53,80 +61,88 @@ var nodeArray = [];
 var makeNodeList = function(value){
 	nodeArray.push(value);
 	console.log("ITEM: ", nodeArray);
+	return nodeArray;
 };
 
 
-// traverse(userProgram, printFunc);
-traverse(userProgram, makeNodeList);
-
-
-
-// MUST HAVE
+// MUST HAVE:
 // function to check that input program DOES have a variable declaration
 // "var = x;"
-// console.log(JSON.stringify(esprima.parse(userInput), null, 4));
-// var something1 = esprima.parse(userInput).body[0].type;
-// var something2 = esprima.parse(userInput).body[1].type;
-// console.log(something1);
-// console.log(something2);
+var searchVariableDeclaration = function(userProgram){
+	var variableDeclarationCount = {};
 
-var containsVariableDeclaration = function(userInput){
-	var something1 = esprima.parse(userInput).body[1].type;
+	// If node does not yet exist in our object, create it.
+	var createCountEntry = function(funcName) { //2
+        if (!variableDeclarationCount[funcName]) {
+            variableDeclarationCount[funcName] = {count: 0, type: "VariableDeclarator"};
+        }
+    };
 
-	// loop through the items in the 'body' array to see if any of them match
+    traverse(userProgram, function(node){
+    	// Type of a node we are looking for is VariableDeclarator, which is a subnode of VariableDeclaration
+    	if (node.type === "VariableDeclarator") {
+    		// Identifier is stored in id subnode and name of the function is in a name property of this idz node.
+    		createCountEntry(node.id.name);
+    		// Increase the count of this node in our object by one.
+    		variableDeclarationCount[node.id.name].count++;
+    	} 
+    });
 
-		// loop through the items inside of each item to see if any of those match
+    printFunc(variableDeclarationCount);
 
-	if(something1 === "VariableDeclaration"){
-		console.log("contains a variable: true");
-	}
-	else {
-		console.log("contains a variable: false");
-	}
 };
 
-// containsVariableDeclaration(userInput);
+searchVariableDeclaration(userProgram);
 
 
-
-// maybe write a search function?
-// and a counter function - then if the variableDeclaration count is 1 or greater, it is ok?
-var findOne = function(userProgram, toMatch){
-	console.log(userProgram);
-
-	for (var i = 0; i < userProgram.length; i++){
-		console.log("value of i: ", i);
-
-	}
-
-	// for (var item in userProgram) {
-		// console.log(item);
-		// console.log(userInputParsed[item]);
-		// console.log("--------------");
-
-		// if (body[item] !== null && typeof(body[item]) === "object") {
-		// 	console.log("hello");
-		// 	findOne(item);
-		// }
-	// }
-};
-
-// findOne(userProgram);
-
-
-
-// MUST HAVE
+// MUST HAVE:
 // function to check that input program DOES have a for loop
+var searchForLoop = function(userProgram){
+	var forLoopCount = {};
+
+	// If node does not yet exist in our object, create it.
+	var createCountEntry = function(funcName) { //2
+        if (!forLoopCount[funcName]) {
+            forLoopCount[funcName] = {count: 0, type: "ForStatement"};
+        }
+    };
+
+	traverse(userProgram, function(node){
+		if (node.type === "ForStatement") {
+    		createCountEntry(node.type);
+    		// Increase the count of this node in our object by one.
+    		forLoopCount[node.type].count++;
+    	} 
+    });
+
+    printFunc(forLoopCount);
+
+};
+
+searchForLoop(userProgram);
 
 
-// MUST NOT HAVE
+// MUST NOT HAVE:
 // function to check that input program DOES NOT have a while loop
+searchWhileLoop = function(userProgram){
 
-// MUST NOT HAVE
+};
+
+
+// MUST NOT HAVE:
 // function to check that input program DOES NOT have an if statement
+searchIfStatement = function(userProgram){
+
+};
 
 
-// STRUCTURE
+// STRUCTURE:
 // function to check that there is a for loop with an if statement contained inside of the for loop
+containsForLoopWithIfStatement = function(userProgram){
+
+};
+
+
+
 
 

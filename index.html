@@ -9,17 +9,31 @@
 	<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.js"></script>
 	<!-- Esprima CDN -->
 	<script type="text/javascript" src="https://cdn.rawgit.com/jquery/esprima/2.7.1/esprima.js"></script>
+	<!-- Ace Code Editor CDN -->
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/ace/1.2.3/min/ace.js"></script>
 	<!-- Our JS file -->
 	<script type="text/javascript" src="comparejs.js"></script>
+
+
 	<!-- Our CSS file -->
 	<link type="text/css" rel="stylesheet" href="main.css">
+
 </head>
 
 <body>
 
-	<div id="feedbackArea">Feedback will appear here :)</div>
+	<div id="feedback_area">
+		Feedback will appear here :)
+	</div>
 
-	<textarea name="userInput" rows="30" cols="100" id="userInput" placeholder="Start typing here..."></textarea>
+	<!-- First version used a plain text area to collect user's input -->
+	<!-- <textarea name="user_input" rows="30" cols="100" id="user_input" placeholder="Start typing here..."></textarea> -->
+
+	<div id="ace_editor">// Start typing here. This is a comment.
+
+	</div>
+
+
 
 </body>
 </html>

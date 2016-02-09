@@ -79,10 +79,10 @@ var analyzeProgram = function(userProgram, targetNode, passPhrase, failPhrase){
 
     var checkResults = function(result){
 		if (result[targetNode]){
-			console.log(passPhrase);
+			// console.log(passPhrase);
 			return passPhrase;
 		} else {
-			console.log(failPhrase);
+			// console.log(failPhrase);
 			return failPhrase;
 		}
 	};
@@ -136,7 +136,7 @@ $(document).ready(function(){
 	var feedbackArea = $("#feedbackArea");
 
 	textArea.keyup(function(){
-		console.log("keyup handler called");
+		// console.log("keyup handler called");
 		console.log(textArea.val());
 		var userProgram = esprima.parse(textArea.val());
 		var feedbackA = analyzeProgram(userProgram, nodeVariableDeclaration, msgVariableDeclarationPass, msgVariableDeclarationFail);

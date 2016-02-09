@@ -18,7 +18,7 @@ A working demo is available at [http://lindsayelia.github.io/khan-academy-compar
 
 **1.** Evaluate Esprima and Acorn and provide justification for choosing one over the other.
 
-**2.** Test that program is supported by all modern versions of Firefox, Chrome, and Safari and IE 8+. Make sure that the textarea is not blocking, or slowing down, user input in as many browsers as possible.
+**2.** Test that the program/framework is supported by all modern versions of Firefox, Chrome, and Safari and IE 8+. Make sure that the textarea is not blocking, or slowing down, user input in as many browsers as possible.
 
 
 

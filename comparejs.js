@@ -133,43 +133,22 @@ var msgIfStatementFail = "&cross; Not quite there...remember, we do NOT want to 
 $(document).ready(function(){
 
 	var feedbackArea = $("#feedback_area");
-
-	var editor = ace.edit("ace_editor");
-    editor.setTheme("ace/theme/iplastic");
-    editor.getSession().setMode("ace/mode/javascript");
-
-    editor.getSession().on('change', function(e) {
-		console.log("editor value: ", editor.getValue());
-
-    	var userProgram = esprima.parse(editor.getValue());
-    	// console.log("user program:", userProgram);
-
-  //   	var feedbackA = analyzeProgram(userProgram, nodeVariableDeclaration, msgVariableDeclarationPass, msgVariableDeclarationFail);
-		// var feedbackB = analyzeProgram(userProgram, nodeForLoop, msgForLoopPass, msgForLoopFail);
-		// var feedbackC = analyzeProgram(userProgram, nodeWhileLoop, msgWhileLoopFail, msgWhileLoopPass);
-		// var feedbackD = analyzeProgram(userProgram, nodeIfStatement, msgIfStatementFail, msgIfStatementPass);
-
-		// feedbackArea.html("<p>" + feedbackA + "</p>" + 
-		// 				  "<p>" + feedbackB + "</p>" +
-		// 				  "<p>" + feedbackC + "</p>" +
-		// 				  "<p>" + feedbackD + "</p>" );
-
-	});
-
-	// var textArea = $("#user_input");
+	var textArea = $("#user_input");
 	
+	textArea.keyup(function(){
+		// console.log("keyup handler called");
+		console.log(textArea.val());
+		var userProgram = esprima.parse(textArea.val());
+		var feedbackA = analyzeProgram(userProgram, nodeVariableDeclaration, msgVariableDeclarationPass, msgVariableDeclarationFail);
+		var feedbackB = analyzeProgram(userProgram, nodeForLoop, msgForLoopPass, msgForLoopFail);
+		var feedbackC = analyzeProgram(userProgram, nodeWhileLoop, msgWhileLoopFail, msgWhileLoopPass);
+		var feedbackD = analyzeProgram(userProgram, nodeIfStatement, msgIfStatementFail, msgIfStatementPass);
 
-	// textArea.keyup(function(){
-	// 	// console.log("keyup handler called");
-	// 	console.log(textArea.val());
-	// 	// var userProgram = esprima.parse(textArea.val());
-	// 	var feedbackA = analyzeProgram(userProgram, nodeVariableDeclaration, msgVariableDeclarationPass, msgVariableDeclarationFail);
-	// 	var feedbackB = analyzeProgram(userProgram, nodeForLoop, msgForLoopPass, msgForLoopFail);
-	// 	var feedbackC = analyzeProgram(userProgram, nodeWhileLoop, msgWhileLoopFail, msgWhileLoopPass);
-	// 	var feedbackD = analyzeProgram(userProgram, nodeIfStatement, msgIfStatementFail, msgIfStatementPass);
-
-
-	// });
+		feedbackArea.html("<p>" + feedbackA + "</p>" + 
+						  "<p>" + feedbackB + "</p>" +
+						  "<p>" + feedbackC + "</p>" +
+						  "<p>" + feedbackD + "</p>" );
+	});
 
 });
 

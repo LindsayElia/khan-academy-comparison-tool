@@ -80,13 +80,15 @@ var analyzeProgram = function(userProgram, targetNode, passPhrase, failPhrase){
     var checkResults = function(result){
 		if (result[targetNode]){
 			console.log(passPhrase);
+			return passPhrase;
 		} else {
 			console.log(failPhrase);
+			return failPhrase;
 		}
 	};
 
-    printFunc(nodeCount);
-    checkResults(nodeCount);
+    // printFunc(nodeCount);
+    return checkResults(nodeCount);
 
 };
 
@@ -95,30 +97,30 @@ var analyzeProgram = function(userProgram, targetNode, passPhrase, failPhrase){
 // function to check that input program DOES have a variable declaration
 // "var = x;"
 var nodeVariableDeclaration = "VariableDeclaration";
-var msgVariableDeclarationPass= "Good job! You have at least one variable declaration in your program.";
-var msgVariableDeclarationFail = "Not quite there...try adding a variable using the 'var' keyword.";
+var msgVariableDeclarationPass= "&check; Good job! You have at least one variable declaration in your program.";
+var msgVariableDeclarationFail = "&cross; Not quite there...try adding a variable using the 'var' keyword.";
 // analyzeProgram(userProgram, nodeVariableDeclaration, msgVariableDeclarationPass, msgVariableDeclarationFail);
 
 // MUST HAVE:
 // function to check that input program DOES have a for loop
 var nodeForLoop = "ForStatement";
-var msgForLoopPass = "Good job! You have at least one for loop in your program.";
-var msgForLoopFail = "Not quite there...try adding a for loop to your program.";
+var msgForLoopPass = "&check; Good job! You have at least one for loop in your program.";
+var msgForLoopFail = "&cross; Not quite there...try adding a for loop to your program.";
 // analyzeProgram(userProgram, nodeForLoop, msgForLoopPass, msgForLoopFail);
 
 // MUST NOT HAVE:
 // function to check that input program DOES NOT have a while loop
 var nodeWhileLoop = "WhileStatement";
-var msgWhileLoopPass = "Good job! We do NOT want to be using a while loop here.";
-var msgWhileLoopFail = "Not quite there...remember, we do NOT want to be using a while loop. Try something else?";
+var msgWhileLoopPass = "&check; Good job! We do NOT want to be using a while loop here.";
+var msgWhileLoopFail = "&cross; Not quite there...remember, we do NOT want to be using a while loop. Try something else?";
 // switch the order of the pass & fail messaging, since a pass would occur when there is no node by this name found
 // analyzeProgram(userProgram, nodeWhileLoop, msgWhileLoopFail, msgWhileLoopPass);
 
 // MUST NOT HAVE:
 // function to check that input program DOES NOT have an if statement
 var nodeIfStatement = "IfStatement";
-var msgIfStatementPass = "Good job! We do NOT want to be using an if statement here.";
-var msgIfStatementFail = "Not quite there...remember, we do NOT want to be using an if statement. Try something else?";
+var msgIfStatementPass = "&check; Good job! We do NOT want to be using an if statement here.";
+var msgIfStatementFail = "&cross; Not quite there...remember, we do NOT want to be using an if statement. Try something else?";
 // switch the order of the pass & fail messaging, since a pass would occur when there is no node by this name found
 // analyzeProgram(userProgram, nodeIfStatement, msgIfStatementFail, msgIfStatementPass);
 
@@ -137,9 +139,15 @@ $(document).ready(function(){
 		console.log("keyup handler called");
 		console.log(textArea.val());
 		var userProgram = esprima.parse(textArea.val());
-		analyzeProgram(userProgram, nodeVariableDeclaration, msgVariableDeclarationPass, msgVariableDeclarationFail);
+		var feedbackA = analyzeProgram(userProgram, nodeVariableDeclaration, msgVariableDeclarationPass, msgVariableDeclarationFail);
+		var feedbackB = analyzeProgram(userProgram, nodeForLoop, msgForLoopPass, msgForLoopFail);
+		var feedbackC = analyzeProgram(userProgram, nodeWhileLoop, msgWhileLoopFail, msgWhileLoopPass);
+		var feedbackD = analyzeProgram(userProgram, nodeIfStatement, msgIfStatementFail, msgIfStatementPass);
 
-		feedbackArea.text("hi hi hi");
+		feedbackArea.html("<p>" + feedbackA + "</p>" + 
+						  "<p>" + feedbackB + "</p>" +
+						  "<p>" + feedbackC + "</p>" +
+						  "<p>" + feedbackD + "</p>" );
 
 	});
 

@@ -1,14 +1,7 @@
 // require esprima node module
 var esprima = require('esprima');
 
-
-// global variables
-var $anything;
-var $firstVariable;
-var $secondVariable;
-
-
-
+// sample code that the user would type in, to check if our functions our working
 var userInput = "var i;" +
 				"var lindsay;" +
 				"for ( i = 0; i < 10; i++) {" +
@@ -23,7 +16,7 @@ var userInput = "var i;" +
 // this format is for tree traversal
 var userProgram = esprima.parse(userInput);
 
-
+// for testing purposes in the console
 var printFunc = function(value){
 	console.log(value);
 };
@@ -32,7 +25,7 @@ var printFunc = function(value){
 // traverse each node in the tree and apply a funtcion to it
 function traverse(node, calledFunction) {
 	// Calling the function for a root node - base of recursion
-	console.log("-------------------------------------");
+	// console.log("-------------------------------------");
     calledFunction(node);
 
     // Loop through all properties of a root a node
@@ -57,95 +50,77 @@ function traverse(node, calledFunction) {
     }
 }
 
-
-// MUST HAVE:
-// function to check that input program DOES have a variable declaration
-// "var = x;"
-var searchVariableDeclaration = function(userProgram){
-	var variableDeclarationCount = {};
+// create empty object to hold node count,
+// traverse the program
+// if node is found, increase count for that node by 1
+// display pass or fail message
+var analyzeProgram = function(userProgram, targetNode, passPhrase, failPhrase){
+	var nodeCount = {};
 
 	// If node does not yet exist in our object, create it.
 	var createCountEntry = function(funcName) { //2
-        if (!variableDeclarationCount[funcName]) {
-            variableDeclarationCount[funcName] = {count: 0, type: "VariableDeclarator"};
+        if (!nodeCount[funcName]) {
+            nodeCount[funcName] = {count: 0, type: targetNode};
         }
     };
 
     traverse(userProgram, function(node){
-    	// Type of a node we are looking for is VariableDeclarator, which is a subnode of VariableDeclaration
-    	if (node.type === "VariableDeclarator") {
-    		// Identifier is stored in id subnode and name of the function is in a name property of this idz node.
-    		createCountEntry(node.id.name);
-    		// Increase the count of this node in our object by one.
-    		variableDeclarationCount[node.id.name].count++;
-    	} 
-    });
-
-    printFunc(variableDeclarationCount);
-
-};
-
-// searchVariableDeclaration(userProgram);
-
-
-// MUST HAVE:
-// function to check that input program DOES have a for loop
-var searchForLoop = function(userProgram){
-	var forLoopCount = {};
-
-	// If node does not yet exist in our object, create it.
-	var createCountEntry = function(funcName) { //2
-        if (!forLoopCount[funcName]) {
-            forLoopCount[funcName] = {count: 0, type: "ForStatement"};
-        }
-    };
-
-	traverse(userProgram, function(node){
-		if (node.type === "ForStatement") {
+    	// Type of a node we are looking for is VariableDeclaration
+    	if (node.type === targetNode) {
     		createCountEntry(node.type);
     		// Increase the count of this node in our object by one.
-    		forLoopCount[node.type].count++;
+    		nodeCount[node.type].count++;
     	} 
     });
 
     var checkResults = function(result){
-		if (result["ForStatement"]){
-			console.log("good job! you have at least one for loop in your program");
+		if (result[targetNode]){
+			console.log(passPhrase);
 		} else {
-			console.log("not quite there...try adding a for loop to your program");
+			console.log(failPhrase);
 		}
 	};
 
-	// printFunc(forLoopCount);
-    checkResults(forLoopCount);
+    printFunc(nodeCount);
+    checkResults(nodeCount);
 
 };
 
-searchForLoop(userProgram);
 
+// MUST HAVE:
+// function to check that input program DOES have a variable declaration
+// "var = x;"
+var nodeVariableDeclaration = "VariableDeclaration";
+var msgVariableDeclarationPass= "Good job! You have at least one variable declaration in your program.";
+var msgVariableDeclarationFail = "Not quite there...try adding a variable using the 'var' keyword.";
+analyzeProgram(userProgram, nodeVariableDeclaration, msgVariableDeclarationPass, msgVariableDeclarationFail);
 
-
-
+// MUST HAVE:
+// function to check that input program DOES have a for loop
+var nodeForLoop = "ForStatement";
+var msgForLoopPass = "Good job! You have at least one for loop in your program.";
+var msgForLoopFail = "Not quite there...try adding a for loop to your program.";
+analyzeProgram(userProgram, nodeForLoop, msgForLoopPass, msgForLoopFail);
 
 // MUST NOT HAVE:
 // function to check that input program DOES NOT have a while loop
-searchWhileLoop = function(userProgram){
-
-};
-
+var nodeWhileLoop = "WhileStatement";
+var msgWhileLoopPass = "Good job! We do NOT want to be using a while loop here.";
+var msgWhileLoopFail = "Not quite there...remember, we do NOT want to be using a while loop. Try something else?";
+// switch the order of the pass & fail messaging, since a pass would occur when there is no node by this name found
+analyzeProgram(userProgram, nodeWhileLoop, msgWhileLoopFail, msgWhileLoopPass);
 
 // MUST NOT HAVE:
 // function to check that input program DOES NOT have an if statement
-searchIfStatement = function(userProgram){
-
-};
-
+var nodeIfStatement = "IfStatement";
+var msgIfStatementPass = "Good job! We do NOT want to be using an if statement here.";
+var msgIfStatementFail = "Not quite there...remember, we do NOT want to be using an if statement. Try something else?";
+// switch the order of the pass & fail messaging, since a pass would occur when there is no node by this name found
+analyzeProgram(userProgram, nodeIfStatement, msgIfStatementFail, msgIfStatementPass);
 
 // STRUCTURE:
 // function to check that there is a for loop with an if statement contained inside of the for loop
-containsForLoopWithIfStatement = function(userProgram){
 
-};
 
 
 

@@ -18,6 +18,13 @@ A working demo is available at [http://lindsayelia.github.io/khan-academy-compar
 
 **1.** Evaluate Esprima and Acorn and provide justification for choosing one over the other.
 
+I chose to use Esprima. Esprima has better documentation than Acorn. It has examples, videos about it, and the documentation is well structured/formatted. I found it much easier to navigate the docs compared to the Acorn docs. Esprima seems much more beginner friendly, which is better if beginners are working on this project also or might be in the future.
+
+The documentation says it:
+- has high performance
+- has good test coverage
+- runs on all modern web browsers
+
 **2.** Test that the program/framework is supported by all modern versions of Firefox, Chrome, and Safari and IE 8+. Make sure that the textarea is not blocking, or slowing down, user input in as many browsers as possible.
 
 

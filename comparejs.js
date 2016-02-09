@@ -1,8 +1,9 @@
+// for command line / working with node only - not for use in web browser
 // require esprima node module
-var esprima = require('esprima');
+// var esprima = require('esprima');
 
 // sample code that the user would type in, to check if our functions our working
-var userInput = "var i;" +
+var practiceCode = "var i;" +
 				"var lindsay;" +
 				"for ( i = 0; i < 10; i++) {" +
 				"    console.log(i);" +
@@ -11,10 +12,13 @@ var userInput = "var i;" +
 				"    console.log(i);" +
 				"}";
 
+// to check that this file is loading in the console
+console.log("hello from comparejs.js file");
+
 // this format is just to output to console
-// var userProgram = JSON.stringify(esprima.parse(userInput), null, 4);
+// var userProgram = JSON.stringify(esprima.parse(practiceCode), null, 4);
 // this format is for tree traversal
-var userProgram = esprima.parse(userInput);
+// var userProgram = esprima.parse(practiceCode);
 
 // for testing purposes in the console
 var printFunc = function(value){
@@ -93,14 +97,14 @@ var analyzeProgram = function(userProgram, targetNode, passPhrase, failPhrase){
 var nodeVariableDeclaration = "VariableDeclaration";
 var msgVariableDeclarationPass= "Good job! You have at least one variable declaration in your program.";
 var msgVariableDeclarationFail = "Not quite there...try adding a variable using the 'var' keyword.";
-analyzeProgram(userProgram, nodeVariableDeclaration, msgVariableDeclarationPass, msgVariableDeclarationFail);
+// analyzeProgram(userProgram, nodeVariableDeclaration, msgVariableDeclarationPass, msgVariableDeclarationFail);
 
 // MUST HAVE:
 // function to check that input program DOES have a for loop
 var nodeForLoop = "ForStatement";
 var msgForLoopPass = "Good job! You have at least one for loop in your program.";
 var msgForLoopFail = "Not quite there...try adding a for loop to your program.";
-analyzeProgram(userProgram, nodeForLoop, msgForLoopPass, msgForLoopFail);
+// analyzeProgram(userProgram, nodeForLoop, msgForLoopPass, msgForLoopFail);
 
 // MUST NOT HAVE:
 // function to check that input program DOES NOT have a while loop
@@ -108,7 +112,7 @@ var nodeWhileLoop = "WhileStatement";
 var msgWhileLoopPass = "Good job! We do NOT want to be using a while loop here.";
 var msgWhileLoopFail = "Not quite there...remember, we do NOT want to be using a while loop. Try something else?";
 // switch the order of the pass & fail messaging, since a pass would occur when there is no node by this name found
-analyzeProgram(userProgram, nodeWhileLoop, msgWhileLoopFail, msgWhileLoopPass);
+// analyzeProgram(userProgram, nodeWhileLoop, msgWhileLoopFail, msgWhileLoopPass);
 
 // MUST NOT HAVE:
 // function to check that input program DOES NOT have an if statement
@@ -116,13 +120,29 @@ var nodeIfStatement = "IfStatement";
 var msgIfStatementPass = "Good job! We do NOT want to be using an if statement here.";
 var msgIfStatementFail = "Not quite there...remember, we do NOT want to be using an if statement. Try something else?";
 // switch the order of the pass & fail messaging, since a pass would occur when there is no node by this name found
-analyzeProgram(userProgram, nodeIfStatement, msgIfStatementFail, msgIfStatementPass);
+// analyzeProgram(userProgram, nodeIfStatement, msgIfStatementFail, msgIfStatementPass);
 
 // STRUCTURE:
 // function to check that there is a for loop with an if statement contained inside of the for loop
 
 
 
+// Do stuff on page load
+$(document).ready(function(){
 
+	var textArea = $("#userInput");
+	var feedbackArea = $("#feedbackArea");
+
+	textArea.keyup(function(){
+		console.log("keyup handler called");
+		console.log(textArea.val());
+		var userProgram = esprima.parse(textArea.val());
+		analyzeProgram(userProgram, nodeVariableDeclaration, msgVariableDeclarationPass, msgVariableDeclarationFail);
+
+		feedbackArea.text("hi hi hi");
+
+	});
+
+});
 
 

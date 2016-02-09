@@ -57,13 +57,6 @@ function traverse(node, calledFunction) {
     }
 }
 
-var nodeArray = [];
-var makeNodeList = function(value){
-	nodeArray.push(value);
-	console.log("ITEM: ", nodeArray);
-	return nodeArray;
-};
-
 
 // MUST HAVE:
 // function to check that input program DOES have a variable declaration
@@ -92,7 +85,7 @@ var searchVariableDeclaration = function(userProgram){
 
 };
 
-searchVariableDeclaration(userProgram);
+// searchVariableDeclaration(userProgram);
 
 
 // MUST HAVE:
@@ -115,11 +108,23 @@ var searchForLoop = function(userProgram){
     	} 
     });
 
-    printFunc(forLoopCount);
+    var checkResults = function(result){
+		if (result["ForStatement"]){
+			console.log("good job! you have at least one for loop in your program");
+		} else {
+			console.log("not quite there...try adding a for loop to your program");
+		}
+	};
+
+	// printFunc(forLoopCount);
+    checkResults(forLoopCount);
 
 };
 
 searchForLoop(userProgram);
+
+
+
 
 
 // MUST NOT HAVE:

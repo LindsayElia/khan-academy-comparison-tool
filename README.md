@@ -27,5 +27,11 @@ The Esprima documentation says it:
 
 **2.** _Test that the program/framework is supported by all modern versions of Firefox, Chrome, and Safari and IE 8+ (web only). Make sure that the textarea is not blocking, or slowing down, user input in as many browsers as possible._
 
+I checked that the testing API works in 3 browsers (Chrome v48, Firefox v43, Safari v9.0.3) with some small manual tests, and those worked well. My JS code file is relatively small, so that may be why there are no obvious issues with the speed that the displayed feedback appears when the user types, from my manual testing.
 
+I’m not using any server side code, so the user does not have to wait for the client side & server side to communicate.
+
+I also used [Google PageSpeed Insights](https://developers.google.com/speed/pagespeed/insights/) to evaluate the page load time and usability of the application, and made changes to my code based on the suggestions shown by PageSpeed.
+
+Lastly, I searched caniuse.com for specific types of JS I was using, jQuery v2 and textarea events. This showed that both jQuery v2 ([http://jquery.com/browser-support/](http://jquery.com/browser-support/)) and input events ([http://caniuse.com/#feat=input-event](http://caniuse.com/#feat=input-event)) are supported on all current versions of Chrome, Firefox, and Safari, and IE9+.
 

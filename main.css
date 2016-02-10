@@ -7,6 +7,7 @@ body {
 }
 
 #feedback_area {
+	width: 92%;
 	background-color: white;
 	margin: 10px;
 	padding: 5px;
@@ -15,10 +16,11 @@ body {
 }
 
 #user_input {
-	width: 96%;
+	width: 92%;
 	margin: 10px;
 	padding: 5px;
     height: 350px;
+    border: 1px solid gray;
 	border-radius: 4px;
 	font-size: 1em;
 }

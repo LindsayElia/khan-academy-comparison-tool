@@ -1,18 +1,18 @@
 // for command line / working with node only - not for use in web browser
 // require esprima node module
-// var esprima = require('esprima');
+var esprima = require('esprima');
 
 // sample code that the user would type in, to check if our functions our working
 var practiceCode = "var i;" +
 				"var lindsay;" +
-				"if (lindsay) {" +
-				"	console.log('lindsay variable exists')" +
-				"}" +
-								"for ( i = 0; i < 10; i++) {" +
+				"for ( i = 0; i < 10; i++) {" +
 				"    console.log(i);" +
 				"}" +
 				"for ( i = 0; i < 10; i++) {" +
-				"    console.log(i);" +
+				"   console.log(i);" +
+				"	if (lindsay) {" +
+				"	console.log('lindsay variable exists')" +
+				"	}" +
 				"}" ;
 
 // to check that this file is loading in the console
@@ -21,7 +21,7 @@ console.log("hello from comparejs.js file");
 // this format is just to output to console
 // var userProgram = JSON.stringify(esprima.parse(practiceCode), null, 4);
 // this format is for tree traversal
-// var userProgram = esprima.parse(practiceCode);
+var userProgram = esprima.parse(practiceCode);
 
 // for testing purposes in the console
 // var printFunc = function(value){
@@ -97,16 +97,17 @@ var analyzeProgram = function(userProgram, targetNode, passPhrase, failPhrase){
 
 
 var findForLoopContainingIfStatement = function(userProgram, forLoop, ifStatement, passPhrase, failPhrase){
-	var nodeCount = [];
-
+	// check for existense of forLoop and ifStatement and if one or both do not exist, prompt the user to create one
+	var nodeCountAllNodes = [];
     traverse(userProgram, function(node){
     	// Type of a node we are looking for
     	if (node.type === forLoop || node.type === ifStatement) {
-    		nodeCount.push(node.type);
-    		console.log(nodeCount);
+    		nodeCountAllNodes.push(node.type);
+    		console.log(nodeCountAllNodes);
     	}
     });
 
+    var nodeCountIfStatementSubNodes = [];
     var checkResults = function(result){
 		if (result.indexOf(forLoop) === -1){
 			console.log("missing a for loop");
@@ -116,17 +117,33 @@ var findForLoopContainingIfStatement = function(userProgram, forLoop, ifStatemen
 			return "&cross; Not quite there...remember, you need to use an if statement.";
 		} else if (result.indexOf(forLoop) !== -1 && result.indexOf(ifStatement) !== -1){
 			console.log("has both");
-			if (result.indexOf(forLoop) < result.indexOf(ifStatement)){
-				console.log("for loop comes before if statement");
-				return "&check; Good job! You have a for loop containing an if statement.";
-			} else {
-				console.log("if statement comes before for loop");
-				return "&cross; Not quite there...it looks like your if statement is not inside of the for loop.";
-			}
+
+		 	// recursively search userProgram for forLoop
+		 	traverse(userProgram, function(node){
+		    	// if we find a forLoop, stop and then recursively search for ifStatement
+		    	if (node.type === forLoop) {
+		    		traverse(node, function(subnode){
+		    			// if we find an ifStatement, return true, otherwise return false
+		    			if (subnode.type === ifStatement){
+		    				console.log("success!");
+		    				nodeCountIfStatementSubNodes.push(subnode.type);
+		    			}
+		    		});
+		    	}
+		    });
+		 
+		 	if (nodeCountIfStatementSubNodes === []){
+		 		console.log("nodeCountIfStatementSubNodes is empty");
+		 		return "&cross; Not quite there...make sure your if statement is INSIDE of the for loop.";
+		 	} else {
+		 		console.log("nodeCountIfStatementSubNodes has " + nodeCountIfStatementSubNodes.length + " if Statement(s)");
+		 		return "&check; Good job! You have a for loop containing " + nodeCountIfStatementSubNodes.length +  " if statement(s).";
+		 	}
+
 		}
 	};
 
-    return checkResults(nodeCount);
+ 	return checkResults(nodeCountAllNodes);
 
 };
 
@@ -166,36 +183,36 @@ var msgIfStatementFail = "&cross; Not quite there...remember, we do NOT want to 
 // function to check that there is a for loop with an if statement contained inside of the for loop
 var msgForLoopWithIfStatementPass = "For Loop containing If Statement - PASS";
 var msgForLoopWithIfStatementFail = "For Loop containing If Statement - FAIL";
-// findForLoopContainingIfStatement(userProgram, nodeForLoop, nodeIfStatement, msgForLoopWithIfStatementPass, msgForLoopWithIfStatementFail);
+findForLoopContainingIfStatement(userProgram, nodeForLoop, nodeIfStatement, msgForLoopWithIfStatementPass, msgForLoopWithIfStatementFail);
 
 
 
 // Do stuff on page load
-$(document).ready(function(){
+// $(document).ready(function(){
 
-	var feedbackArea = $("#feedback_area");
-	var textArea = $("#user_input");
+// 	var feedbackArea = $("#feedback_area");
+// 	var textArea = $("#user_input");
 	
-	textArea.keyup(function(){
-		// console.log("keyup handler called");
-		console.log(textArea.val());
-		// setting {tolerant: true} returns an array of errors
-		var userProgram = esprima.parse(textArea.val(), {tolerant: true});
-		console.log(userProgram);
-		var feedbackA = analyzeProgram(userProgram, nodeVariableDeclaration, msgVariableDeclarationPass, msgVariableDeclarationFail);
-		var feedbackB = analyzeProgram(userProgram, nodeForLoop, msgForLoopPass, msgForLoopFail);
-		var feedbackC = analyzeProgram(userProgram, nodeWhileLoop, msgWhileLoopFail, msgWhileLoopPass);
-		var feedbackD = analyzeProgram(userProgram, nodeIfStatement, msgIfStatementFail, msgIfStatementPass);
-		var feedbackE = findForLoopContainingIfStatement(userProgram, nodeForLoop, nodeIfStatement, msgForLoopWithIfStatementPass, msgForLoopWithIfStatementFail);
+// 	textArea.keyup(function(){
+// 		// console.log("keyup handler called");
+// 		console.log(textArea.val());
+// 		// setting {tolerant: true} returns an array of errors
+// 		var userProgram = esprima.parse(textArea.val(), {tolerant: true});
+// 		console.log(userProgram);
+// 		var feedbackA = analyzeProgram(userProgram, nodeVariableDeclaration, msgVariableDeclarationPass, msgVariableDeclarationFail);
+// 		var feedbackB = analyzeProgram(userProgram, nodeForLoop, msgForLoopPass, msgForLoopFail);
+// 		var feedbackC = analyzeProgram(userProgram, nodeWhileLoop, msgWhileLoopFail, msgWhileLoopPass);
+// 		var feedbackD = analyzeProgram(userProgram, nodeIfStatement, msgIfStatementFail, msgIfStatementPass);
+// 		var feedbackE = findForLoopContainingIfStatement(userProgram, nodeForLoop, nodeIfStatement, msgForLoopWithIfStatementPass, msgForLoopWithIfStatementFail);
 
 
-		feedbackArea.html("<p>" + feedbackA + "</p>" + 
-						  "<p>" + feedbackB + "</p>" +
-						  "<p>" + feedbackC + "</p>" +
-						  "<p>" + feedbackD + "</p>" +
-						  "<p>" + feedbackE + "</p>" );
-	});
+// 		feedbackArea.html("<p>" + feedbackA + "</p>" + 
+// 						  "<p>" + feedbackB + "</p>" +
+// 						  "<p>" + feedbackC + "</p>" +
+// 						  "<p>" + feedbackD + "</p>" +
+// 						  "<p>" + feedbackE + "</p>" );
+// 	});
 
-});
+// });
 
 

@@ -5,15 +5,16 @@ var esprima = require('esprima');
 // sample code that the user would type in, to check if our functions our working
 var practiceCode = "var i;" +
 				"var lindsay;" +
+				"	if (lindsay) {" +
+				"	console.log('lindsay variable exists')" +
+				"	}" +
 				"for ( i = 0; i < 10; i++) {" +
 				"    console.log(i);" +
 				"}" +
 				"for ( i = 0; i < 10; i++) {" +
 				"   console.log(i);" +
-				"	if (lindsay) {" +
-				"	console.log('lindsay variable exists')" +
-				"	}" +
 				"}" ;
+
 
 // to check that this file is loading in the console
 console.log("hello from comparejs.js file");
@@ -132,10 +133,12 @@ var findForLoopContainingIfStatement = function(userProgram, forLoop, ifStatemen
 		    	}
 		    });
 		 
-		 	if (nodeCountIfStatementSubNodes === []){
+		 	if (nodeCountIfStatementSubNodes.length === 0){
+		 		console.log("subnodearray: ", nodeCountIfStatementSubNodes);
 		 		console.log("nodeCountIfStatementSubNodes is empty");
 		 		return "&cross; Not quite there...make sure your if statement is INSIDE of the for loop.";
 		 	} else {
+		 		console.log("subnodearray: ", nodeCountIfStatementSubNodes);
 		 		console.log("nodeCountIfStatementSubNodes has " + nodeCountIfStatementSubNodes.length + " if Statement(s)");
 		 		return "&check; Good job! You have a for loop containing " + nodeCountIfStatementSubNodes.length +  " if statement(s).";
 		 	}
